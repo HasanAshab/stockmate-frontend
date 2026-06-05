@@ -28,17 +28,19 @@ const Login = () => {
       // Fetch CSRF cookie before login
       await api.get('/sanctum/csrf-cookie');
 
-      const response = await api.post('/api/v1/auth/login', data);
-      console.log(response.data);
-
-      const { token, user } = response.data;
+      await api.post('/api/v1/auth/login', data);
+      
+      // Fetch user profile after successful login
+      const profileResponse = await api.get('/api/v1/profile');
+      const user = profileResponse.data.data || profileResponse.data;
 
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
+        // Log out immediately if inactive
+        await api.post('/api/v1/auth/logout').catch(() => {});
         return;
       }
 
-      localStorage.setItem('authToken', token);
       localStorage.setItem('authUser', JSON.stringify(user));
 
       toast.success("Welcome back!");

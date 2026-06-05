@@ -1,4 +1,5 @@
 import { NavLink } from 'react-router-dom';
+import api from '../../api/axios';
 import { 
   HomeIcon, 
   UsersIcon, 
@@ -18,8 +19,12 @@ const Sidebar = () => {
   const user = userStr ? JSON.parse(userStr) : null;
   const isAdmin = user?.role === 2;
 
-  const handleLogout = () => {
-    localStorage.removeItem('authToken');
+  const handleLogout = async () => {
+    try {
+      await api.post('/api/v1/auth/logout');
+    } catch (e) {
+      console.error('Logout failed', e);
+    }
     localStorage.removeItem('authUser');
     window.location.href = '/login';
   };

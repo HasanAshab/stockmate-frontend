@@ -10,21 +10,12 @@ const api = axios.create({
   },
 });
 
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('authToken');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+// Session-based authentication does not require manual token injection
 
 api.interceptors.response.use((response) => {
   return response;
 }, (error) => {
-  if (error.response?.status === 401) {
-    localStorage.removeItem('authToken');
+  if (error.response?.status === 401 || error.response?.status === 419) {
     localStorage.removeItem('authUser');
     window.location.href = '/login';
   }
