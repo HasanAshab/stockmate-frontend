@@ -13,7 +13,7 @@ import StockManagement from '../pages/stock/StockManagement';
 import StockLogsList from '../pages/stock/StockLogsList';
 import PurchaseOrdersList from '../pages/orders/PurchaseOrdersList';
 import SalesOrdersList from '../pages/orders/SalesOrdersList';
-import Reports from '../pages/reports/Reports';
+import ActivityLogsList from '../pages/activity-logs/ActivityLogsList';
 
 const AppRoutes = () => {
   return (
@@ -41,7 +41,7 @@ const AppRoutes = () => {
           <Route path="/categories" element={<CategoriesList />} />
           <Route path="/suppliers" element={<SuppliersList />} />
           <Route path="/purchase-orders" element={<PurchaseOrdersList />} />
-          <Route path="/reports" element={<Reports />} />
+          <Route path="/activity-logs" element={<ActivityLogsList />} />
         </Route>
       </Route>
     </Routes>
