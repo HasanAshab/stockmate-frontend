@@ -1,26 +1,21 @@
-// Mock API for Categories
+import api from '../axios';
+
 export const getCategories = async () => {
-  await new Promise(r => setTimeout(r, 400));
-  return {
-    data: [
-      { id: 1, name: "Electronics", description: "Electronic devices and gadgets" },
-      { id: 2, name: "Furniture", description: "Office and home furniture" },
-      { id: 3, name: "Accessories", description: "Computer and phone accessories" }
-    ]
-  };
+  const response = await api.get('/categories');
+  return response.data;
 };
 
 export const createCategory = async (data) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { data: { ...data, id: Math.floor(Math.random() * 1000) } };
+  const response = await api.post('/categories', data);
+  return response.data;
 };
 
 export const updateCategory = async ({ id, data }) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { data };
+  const response = await api.put(`/categories/${id}`, data);
+  return response.data;
 };
 
 export const deleteCategory = async (id) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { success: true };
+  const response = await api.delete(`/categories/${id}`);
+  return response.data;
 };

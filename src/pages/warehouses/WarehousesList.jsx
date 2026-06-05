@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getWarehouses, toggleWarehouseStatus } from '../../api/endpoints/warehouses';
+import { getWarehouses, updateWarehouse } from '../../api/endpoints/warehouses';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/Table';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
@@ -19,7 +19,7 @@ const WarehousesList = () => {
   });
 
   const toggleStatusMutation = useMutation({
-    mutationFn: toggleWarehouseStatus,
+    mutationFn: (warehouse) => updateWarehouse({ id: warehouse.id, data: { ...warehouse, is_active: !warehouse.is_active } }),
     onSuccess: () => {
       toast.success('Warehouse status updated');
       queryClient.invalidateQueries({ queryKey: ['warehouses'] });
@@ -37,9 +37,9 @@ const WarehousesList = () => {
     setIsModalOpen(true);
   };
 
-  const handleToggleStatus = (id) => {
+  const handleToggleStatus = (warehouse) => {
     if (confirm('Are you sure you want to toggle this warehouse status?')) {
-      toggleStatusMutation.mutate(id);
+      toggleStatusMutation.mutate(warehouse);
     }
   };
 
@@ -81,8 +81,8 @@ const WarehousesList = () => {
                     <Button 
                       variant={warehouse.is_active ? 'ghost' : 'default'} 
                       size="sm" 
-                      onClick={() => handleToggleStatus(warehouse.id)}
-                      isLoading={toggleStatusMutation.isPending && toggleStatusMutation.variables === warehouse.id}
+                      onClick={() => handleToggleStatus(warehouse)}
+                      isLoading={toggleStatusMutation.isPending && toggleStatusMutation.variables?.id === warehouse.id}
                       className={warehouse.is_active ? 'text-destructive hover:bg-destructive/10' : ''}
                     >
                       {warehouse.is_active ? 'Deactivate' : 'Activate'}

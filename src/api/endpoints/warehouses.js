@@ -1,26 +1,21 @@
-// Mock API for Warehouses
+import api from '../axios';
+
 export const getWarehouses = async () => {
-  await new Promise(r => setTimeout(r, 400));
-  return {
-    data: [
-      { id: 1, name: "Main Hub", location: "Gulshan, Dhaka", is_active: true },
-      { id: 2, name: "North Branch", location: "Uttara, Dhaka", is_active: true },
-      { id: 3, name: "Old Warehouse", location: "Mirpur, Dhaka", is_active: false }
-    ]
-  };
+  const response = await api.get('/warehouses');
+  return response.data;
 };
 
 export const createWarehouse = async (data) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { data: { ...data, id: Math.floor(Math.random() * 1000) } };
+  const response = await api.post('/warehouses', data);
+  return response.data;
 };
 
 export const updateWarehouse = async ({ id, data }) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { data };
+  const response = await api.put(`/warehouses/${id}`, data);
+  return response.data;
 };
 
 export const toggleWarehouseStatus = async (id) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { success: true };
+  const response = await api.patch(`/warehouses/${id}/toggle-status`);
+  return response.data;
 };

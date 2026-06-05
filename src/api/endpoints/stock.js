@@ -1,25 +1,21 @@
-// Mock API for Stock
+import api from '../axios';
+
 export const getStockLogs = async () => {
-  await new Promise(r => setTimeout(r, 400));
-  return {
-    data: [
-      { id: 1, product_name: "MacBook Pro 16\"", sku: "MAC-PRO-16", type: "in", quantity: 50, warehouse_name: "Main Hub", user_name: "Admin User", created_at: new Date().toISOString() },
-      { id: 2, name: "Dell XPS 15", product_name: "Dell XPS 15", sku: "DELL-XPS-15", type: "out", quantity: 5, warehouse_name: "North Branch", user_name: "Staff One", created_at: new Date(Date.now() - 86400000).toISOString() }
-    ]
-  };
+  const response = await api.get('/stock-logs');
+  return response.data;
 };
 
 export const submitStockIn = async (data) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { success: true };
+  const response = await api.post('/stock-logs', { ...data, type: 'in' });
+  return response.data;
 };
 
 export const submitStockOut = async (data) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { success: true };
+  const response = await api.post('/stock-logs', { ...data, type: 'out' });
+  return response.data;
 };
 
 export const submitStockTransfer = async (data) => {
-  await new Promise(r => setTimeout(r, 400));
-  return { success: true };
+  const response = await api.post('/stock-logs/transfer', data);
+  return response.data;
 };
