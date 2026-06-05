@@ -16,7 +16,7 @@ const loginSchema = z.object({
 const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
-  
+
   const { register, handleSubmit, formState: { errors } } = useForm({
     resolver: zodResolver(loginSchema)
   });
@@ -24,17 +24,23 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      const response = await api.post('/auth/login', data);
+
+      // Fetch CSRF cookie before login
+      await api.get('/sanctum/csrf-cookie');
+
+      const response = await api.post('/api/v1/auth/login', data);
+      console.log(response.data);
+
       const { token, user } = response.data;
-      
+
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
         return;
       }
-      
+
       localStorage.setItem('authToken', token);
       localStorage.setItem('authUser', JSON.stringify(user));
-      
+
       toast.success("Welcome back!");
       navigate('/dashboard', { replace: true });
     } catch (error) {
@@ -49,7 +55,7 @@ const Login = () => {
       {/* Background decoration */}
       <div className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[100px] pointer-events-none"></div>
       <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-purple-500/10 rounded-full blur-[100px] pointer-events-none"></div>
-      
+
       <div className="w-full max-w-md p-8 relative z-10">
         <div className="bg-card/70 backdrop-blur-2xl border border-border/60 rounded-[2rem] shadow-[0_8px_30px_rgb(0,0,0,0.04)] p-10 animate-in fade-in zoom-in-[0.98] duration-700">
           <div className="text-center mb-10">
@@ -68,7 +74,7 @@ const Login = () => {
               {...register('email')}
               error={errors.email?.message}
             />
-            
+
             <div className="space-y-1">
               <Input
                 label="Password"
@@ -86,7 +92,7 @@ const Login = () => {
               Sign In
             </Button>
           </form>
-          
+
           <div className="mt-10 text-center text-xs text-muted-foreground font-medium">
             <p>Protected internal system. Authorized personnel only.</p>
           </div>
