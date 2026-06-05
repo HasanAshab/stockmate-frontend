@@ -29,15 +29,16 @@ const Login = () => {
       await api.get('/sanctum/csrf-cookie');
 
       await api.post('/api/v1/auth/login', data);
-      
+
       // Fetch user profile after successful login
       const profileResponse = await api.get('/api/v1/profile');
       const user = profileResponse.data.data || profileResponse.data;
+      console.log(user);
 
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
         // Log out immediately if inactive
-        await api.post('/api/v1/auth/logout').catch(() => {});
+        await api.post('/api/v1/auth/logout').catch(() => { });
         return;
       }
 
