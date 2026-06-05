@@ -33,7 +33,6 @@ const Login = () => {
       // Fetch user profile after successful login
       const profileResponse = await api.get('/api/v1/profile');
       const user = profileResponse.data.data || profileResponse.data;
-      console.log(user);
 
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
