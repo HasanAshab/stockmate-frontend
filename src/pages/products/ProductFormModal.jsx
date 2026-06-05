@@ -2,8 +2,10 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { createProduct, updateProduct } from '../../api/endpoints/products';
+import { getCategories } from '../../api/endpoints/categories';
+import { getSuppliers } from '../../api/endpoints/suppliers';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -21,6 +23,12 @@ export const ProductFormModal = ({ isOpen, onClose, product }) => {
   const isEditing = !!product;
   const queryClient = useQueryClient();
 
+  const { data: categoriesData } = useQuery({ queryKey: ['categories'], queryFn: getCategories, enabled: isOpen });
+  const { data: suppliersData } = useQuery({ queryKey: ['suppliers'], queryFn: getSuppliers, enabled: isOpen });
+
+  const categories = categoriesData?.data || [];
+  const suppliers = suppliersData?.data || [];
+
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(schema)
   });
@@ -31,11 +39,11 @@ export const ProductFormModal = ({ isOpen, onClose, product }) => {
         name: product.name, 
         sku: product.sku, 
         price: product.price,
-        category_id: 1, // hardcoded for mock since API didn't return IDs
-        supplier_id: 1 
+        category_id: product.category?.id || product.category_id || '',
+        supplier_id: product.supplier?.id || product.supplier_id || '' 
       });
     } else if (isOpen) {
-      reset({ name: '', sku: '', price: 0, category_id: 1, supplier_id: 1 });
+      reset({ name: '', sku: '', price: 0, category_id: '', supplier_id: '' });
     }
   }, [product, isOpen, reset]);
 
@@ -71,9 +79,12 @@ export const ProductFormModal = ({ isOpen, onClose, product }) => {
               {...register('category_id')}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             >
-              <option value={1}>Electronics</option>
-              <option value={2}>Furniture</option>
+              <option value="">Select Category</option>
+              {categories.map((c) => (
+                <option key={c.id} value={c.id}>{c.name}</option>
+              ))}
             </select>
+            {errors.category_id && <p className="text-xs text-destructive">{errors.category_id.message}</p>}
           </div>
           <div className="space-y-1.5">
             <label className="text-sm font-medium text-foreground">Supplier</label>
@@ -81,9 +92,12 @@ export const ProductFormModal = ({ isOpen, onClose, product }) => {
               {...register('supplier_id')}
               className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
             >
-              <option value={1}>Global Tech Supplies</option>
-              <option value={2}>Mega Traders</option>
+              <option value="">Select Supplier</option>
+              {suppliers.map((s) => (
+                <option key={s.id} value={s.id}>{s.name}</option>
+              ))}
             </select>
+            {errors.supplier_id && <p className="text-xs text-destructive">{errors.supplier_id.message}</p>}
           </div>
         </div>
 
