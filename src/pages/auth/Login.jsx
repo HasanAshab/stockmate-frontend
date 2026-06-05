@@ -24,26 +24,8 @@ const Login = () => {
   const onSubmit = async (data) => {
     try {
       setIsLoading(true);
-      // Mocking successful login for now as backend might not be ready
-      // const response = await api.post('/auth/login', data);
-      
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      const mockResponse = {
-        data: {
-          token: "1|mocktoken123",
-          user: {
-            id: 1,
-            name: "Admin User",
-            email: data.email,
-            role: 2,
-            is_active: true
-          }
-        }
-      };
-
-      const { token, user } = mockResponse.data;
+      const response = await api.post('/auth/login', data);
+      const { token, user } = response.data;
       
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
