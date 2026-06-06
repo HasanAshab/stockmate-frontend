@@ -26,6 +26,8 @@ const Login = () => {
       setIsLoading(true);
 
       const loginResponse = await api.post('/api/v1/auth/token/login', data);
+      console.log("loginResponse", loginResponse.data);
+
       const { token, user: rawUser } = loginResponse.data;
 
       // Flatten user object from JSON API if necessary
