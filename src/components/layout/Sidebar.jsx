@@ -25,6 +25,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     } catch (e) {
       console.error('Logout failed', e);
     }
+    localStorage.removeItem('authToken');
     localStorage.removeItem('authUser');
     window.location.href = '/login';
   };

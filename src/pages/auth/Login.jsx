@@ -25,22 +25,18 @@ const Login = () => {
     try {
       setIsLoading(true);
 
-      // Fetch CSRF cookie before login
-      await api.get('/sanctum/csrf-cookie');
+      const loginResponse = await api.post('/api/v1/auth/token/login', data);
+      const { token, user: rawUser } = loginResponse.data;
 
-      await api.post('/api/v1/auth/login', data);
-
-      // Fetch user profile after successful login
-      const profileResponse = await api.get('/api/v1/profile');
-      const user = profileResponse.data.data || profileResponse.data;
+      // Flatten user object from JSON API if necessary
+      const user = rawUser.data ? { id: rawUser.data.id, ...rawUser.data.attributes } : rawUser;
 
       if (!user.is_active) {
         toast.error("Your account has been deactivated.");
-        // Log out immediately if inactive
-        await api.post('/api/v1/auth/logout').catch(() => { });
         return;
       }
 
+      localStorage.setItem('authToken', token);
       localStorage.setItem('authUser', JSON.stringify(user));
 
       toast.success("Welcome back!");
