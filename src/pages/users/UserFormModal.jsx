@@ -31,7 +31,7 @@ export const UserFormModal = ({ isOpen, onClose, user }) => {
 
   useEffect(() => {
     if (user && isOpen) {
-      reset({ name: user.name, email: user.email, role: user.role });
+      reset({ name: user.name, email: user.email, role: user.role?.id || user.role });
     } else if (isOpen) {
       reset({ name: '', email: '', password: '', role: defaultRole });
     }

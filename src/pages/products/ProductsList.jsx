@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 const ProductsList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState(null);
-  
+
   const queryClient = useQueryClient();
   const currentUser = JSON.parse(localStorage.getItem('authUser') || '{}');
   const isAdmin = currentUser.role === 2;
@@ -86,13 +86,13 @@ const ProductsList = () => {
                   </TableCell>
                   <TableCell className="text-muted-foreground">{product.category}</TableCell>
                   <TableCell className="text-muted-foreground max-w-[150px] truncate">{product.supplier}</TableCell>
-                  <TableCell className="font-semibold">${product.price.toFixed(2)}</TableCell>
+                  <TableCell className="font-semibold">${Number(product.price).toFixed(2)}</TableCell>
                   {isAdmin && (
                     <TableCell className="text-right space-x-2">
                       <Button variant="outline" size="sm" onClick={() => handleEdit(product)}>Edit</Button>
-                      <Button 
-                        variant="ghost" 
-                        size="sm" 
+                      <Button
+                        variant="ghost"
+                        size="sm"
                         onClick={() => handleDelete(product.id)}
                         isLoading={deleteMutation.isPending && deleteMutation.variables === product.id}
                         className="text-destructive hover:bg-destructive/10"
@@ -109,10 +109,10 @@ const ProductsList = () => {
       </div>
 
       {isAdmin && (
-        <ProductFormModal 
-          isOpen={isModalOpen} 
-          onClose={() => setIsModalOpen(false)} 
-          product={editingProduct} 
+        <ProductFormModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          product={editingProduct}
         />
       )}
     </div>

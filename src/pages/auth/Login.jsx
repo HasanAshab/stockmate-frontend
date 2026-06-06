@@ -17,7 +17,7 @@ const Login = () => {
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
 
-  const { register, handleSubmit, formState: { errors } } = useForm({
+  const { register, handleSubmit, formState: { errors }, reset } = useForm({
     resolver: zodResolver(loginSchema)
   });
 
@@ -101,26 +101,26 @@ const Login = () => {
               Demo Credentials
             </h3>
             <div className="space-y-2">
-              <button 
+              <button
                 type="button"
-                onClick={() => reset({ email: 'admin1@example.com', password: 'password' })}
+                onClick={() => reset({ email: 'admin@example.com', password: 'password' })}
                 className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-card border border-transparent hover:border-border/50 transition-all text-left group/btn"
               >
                 <div>
                   <div className="text-[13px] font-semibold text-foreground group-hover/btn:text-primary transition-colors">Admin</div>
-                  <div className="text-[11px] text-muted-foreground font-mono">admin1@example.com</div>
+                  <div className="text-[11px] text-muted-foreground font-mono">admin@example.com</div>
                 </div>
                 <div className="text-[11px] bg-muted px-2 py-1 rounded text-muted-foreground font-mono">password</div>
               </button>
-              
-              <button 
+
+              <button
                 type="button"
-                onClick={() => reset({ email: 'staff1@example.com', password: 'password' })}
+                onClick={() => reset({ email: 'staff@example.com', password: 'password' })}
                 className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-card border border-transparent hover:border-border/50 transition-all text-left group/btn"
               >
                 <div>
                   <div className="text-[13px] font-semibold text-foreground group-hover/btn:text-primary transition-colors">Staff</div>
-                  <div className="text-[11px] text-muted-foreground font-mono">staff1@example.com</div>
+                  <div className="text-[11px] text-muted-foreground font-mono">staff@example.com</div>
                 </div>
                 <div className="text-[11px] bg-muted px-2 py-1 rounded text-muted-foreground font-mono">password</div>
               </button>

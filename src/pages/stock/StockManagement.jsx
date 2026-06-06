@@ -40,8 +40,19 @@ const StockInForm = () => {
     onSuccess: () => { toast.success('Stock added successfully'); reset(); }
   });
 
+  const onSubmit = (d) => {
+    const payload = {
+      ...d,
+      quantity: Number(d.quantity),
+    };
+    if (d.unit_cost) {
+      payload.unit_cost = Number(d.unit_cost);
+    }
+    mutation.mutate(payload);
+  };
+
   return (
-    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-5 animate-in fade-in slide-in-from-left-4 duration-300">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 animate-in fade-in slide-in-from-left-4 duration-300">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center text-success border border-success/20">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
@@ -51,7 +62,7 @@ const StockInForm = () => {
           <p className="text-xs text-muted-foreground font-medium">Add new inventory to a warehouse</p>
         </div>
       </div>
-      
+
       <div className="grid grid-cols-2 gap-5">
         <div className="space-y-1.5">
           <label className="text-sm font-medium text-foreground">Warehouse</label>
@@ -94,8 +105,15 @@ const StockOutForm = () => {
     onError: () => { toast.error('Insufficient stock'); }
   });
 
+  const onSubmit = (d) => {
+    mutation.mutate({
+      ...d,
+      quantity: Number(d.quantity),
+    });
+  };
+
   return (
-    <form onSubmit={handleSubmit((d) => mutation.mutate(d))} className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
+    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5 animate-in fade-in slide-in-from-right-4 duration-300">
       <div className="flex items-center gap-3 mb-6">
         <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center text-destructive border border-destructive/20">
           <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 12H4" /></svg>

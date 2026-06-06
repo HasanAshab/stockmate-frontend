@@ -1,12 +1,12 @@
 import { NavLink } from 'react-router-dom';
 import api from '../../api/axios';
-import { 
-  HomeIcon, 
-  UsersIcon, 
-  BuildingOfficeIcon, 
-  TagIcon, 
-  TruckIcon, 
-  ArchiveBoxIcon, 
+import {
+  HomeIcon,
+  UsersIcon,
+  BuildingOfficeIcon,
+  TagIcon,
+  TruckIcon,
+  ArchiveBoxIcon,
   ShoppingCartIcon,
   CurrencyDollarIcon,
   ClipboardDocumentListIcon,
@@ -17,7 +17,7 @@ import {
 const Sidebar = ({ isOpen, setIsOpen }) => {
   const userStr = localStorage.getItem('authUser');
   const user = userStr ? JSON.parse(userStr) : null;
-  const isAdmin = user?.role === 2;
+  const isAdmin = user?.role?.name === 'Admin';
 
   const handleLogout = async () => {
     try {
@@ -31,10 +31,9 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
   };
 
   const navItemClass = ({ isActive }) =>
-    `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
-      isActive 
-        ? 'bg-primary text-primary-foreground font-medium shadow-md translate-x-1' 
-        : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
+    `flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive
+      ? 'bg-primary text-primary-foreground font-medium shadow-md translate-x-1'
+      : 'text-muted-foreground hover:bg-muted hover:text-foreground hover:translate-x-1'
     }`;
 
   const closeSidebar = () => {
@@ -45,7 +44,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
     <>
       {/* Mobile Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-background/80 backdrop-blur-sm z-40 md:hidden transition-opacity"
           onClick={closeSidebar}
         />
@@ -59,14 +58,14 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <h1 className="text-xl font-bold bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent tracking-tight">StockMate</h1>
           </div>
         </div>
-        
+
         <div className="flex-1 overflow-y-auto py-6 px-3 space-y-1 custom-scrollbar">
           <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest mb-3 px-3">Main</div>
           <NavLink to="/dashboard" className={navItemClass} onClick={closeSidebar}>
             <HomeIcon className="w-5 h-5" />
             <span>Dashboard</span>
           </NavLink>
-          
+
           {isAdmin && (
             <>
               <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-8 mb-3 px-3">Administration</div>
@@ -98,7 +97,7 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
             <ArchiveBoxIcon className="w-5 h-5" />
             <span>Stock Management</span>
           </NavLink>
-          
+
           <div className="text-[11px] font-bold text-muted-foreground uppercase tracking-widest mt-8 mb-3 px-3">Orders</div>
           <NavLink to="/purchase-orders" className={navItemClass} onClick={closeSidebar}>
             <ShoppingCartIcon className="w-5 h-5" />

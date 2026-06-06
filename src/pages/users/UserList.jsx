@@ -77,8 +77,8 @@ const UserList = () => {
                   <TableCell className="font-semibold text-foreground">{user.name}</TableCell>
                   <TableCell className="text-muted-foreground">{user.email}</TableCell>
                   <TableCell>
-                    <Badge variant={user.role === 2 ? 'primary' : 'default'}>
-                      {user.role === 2 ? 'Admin' : 'Staff'}
+                    <Badge variant={user.role?.id === 2 ? 'primary' : 'default'}>
+                      {user.role?.name || 'Staff'}
                     </Badge>
                   </TableCell>
                   <TableCell>
