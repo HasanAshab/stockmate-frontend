@@ -93,7 +93,41 @@ const Login = () => {
             </Button>
           </form>
 
-          <div className="mt-10 text-center text-xs text-muted-foreground font-medium">
+          {/* Demo Credentials Widget */}
+          <div className="mt-8 p-4 bg-muted/40 rounded-xl border border-border/50 backdrop-blur-sm relative overflow-hidden group">
+            <div className="absolute top-0 left-0 w-1 h-full bg-primary/50"></div>
+            <h3 className="text-xs font-bold text-foreground mb-3 flex items-center gap-2">
+              <svg className="w-4 h-4 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              Demo Credentials
+            </h3>
+            <div className="space-y-2">
+              <button 
+                type="button"
+                onClick={() => reset({ email: 'admin1@example.com', password: 'password' })}
+                className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-card border border-transparent hover:border-border/50 transition-all text-left group/btn"
+              >
+                <div>
+                  <div className="text-[13px] font-semibold text-foreground group-hover/btn:text-primary transition-colors">Admin</div>
+                  <div className="text-[11px] text-muted-foreground font-mono">admin1@example.com</div>
+                </div>
+                <div className="text-[11px] bg-muted px-2 py-1 rounded text-muted-foreground font-mono">password</div>
+              </button>
+              
+              <button 
+                type="button"
+                onClick={() => reset({ email: 'staff1@example.com', password: 'password' })}
+                className="w-full flex items-center justify-between p-2 rounded-lg hover:bg-card border border-transparent hover:border-border/50 transition-all text-left group/btn"
+              >
+                <div>
+                  <div className="text-[13px] font-semibold text-foreground group-hover/btn:text-primary transition-colors">Staff</div>
+                  <div className="text-[11px] text-muted-foreground font-mono">staff1@example.com</div>
+                </div>
+                <div className="text-[11px] bg-muted px-2 py-1 rounded text-muted-foreground font-mono">password</div>
+              </button>
+            </div>
+          </div>
+
+          <div className="mt-8 text-center text-xs text-muted-foreground font-medium">
             <p>Protected internal system. Authorized personnel only.</p>
           </div>
         </div>
