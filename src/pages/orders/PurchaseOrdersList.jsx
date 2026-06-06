@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { getPurchaseOrders } from '../../api/endpoints/orders';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/Table';
+import { useEnums } from '../../hooks/useEnums';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { format } from 'date-fns';
@@ -9,15 +10,18 @@ const PurchaseOrdersList = () => {
   const currentUser = JSON.parse(localStorage.getItem('authUser') || '{}');
   const isAdmin = currentUser.role === 2;
   const { data, isLoading } = useQuery({ queryKey: ['purchaseOrders'], queryFn: getPurchaseOrders });
+  const { enums } = useEnums();
+  const statuses = enums?.purchase_order_statuses || [];
 
-  const getStatusBadge = (status) => {
-    switch(status) {
-      case 1: return <Badge variant="default">Draft</Badge>;
-      case 2: return <Badge variant="primary">Ordered</Badge>;
-      case 3: return <Badge variant="warning">Partially Received</Badge>;
-      case 4: return <Badge variant="success">Received</Badge>;
-      case 5: return <Badge variant="destructive">Cancelled</Badge>;
-      default: return <Badge>Unknown</Badge>;
+  const getStatusBadge = (statusId) => {
+    const statusName = statuses.find(s => s.id === statusId)?.name || 'Unknown';
+    switch(statusName) {
+      case 'Draft': return <Badge variant="default">Draft</Badge>;
+      case 'Ordered': return <Badge variant="primary">Ordered</Badge>;
+      case 'PartiallyReceived': return <Badge variant="warning">Partially Received</Badge>;
+      case 'Received': return <Badge variant="success">Received</Badge>;
+      case 'Cancelled': return <Badge variant="destructive">Cancelled</Badge>;
+      default: return <Badge>{statusName}</Badge>;
     }
   };
 
@@ -60,7 +64,7 @@ const PurchaseOrdersList = () => {
                   </TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button variant="outline" size="sm">View</Button>
-                    {po.status === 2 && <Button variant="default" size="sm">Receive</Button>}
+                    {po.status === statuses.find(s => s.name === 'Ordered')?.id && <Button variant="default" size="sm">Receive</Button>}
                   </TableCell>
                 </TableRow>
               ))}

@@ -5,13 +5,13 @@ export const getStockLogs = async () => {
   return response.data;
 };
 
-export const submitStockIn = async (data) => {
-  const response = await api.post('/api/v1/stock-logs', { ...data, type: 'in' });
+export const submitStockIn = async (data, typeId) => {
+  const response = await api.post('/api/v1/stock-logs', { ...data, type: typeId });
   return response.data;
 };
 
-export const submitStockOut = async (data) => {
-  const response = await api.post('/api/v1/stock-logs', { ...data, type: 'out' });
+export const submitStockOut = async (data, typeId) => {
+  const response = await api.post('/api/v1/stock-logs', { ...data, type: typeId });
   return response.data;
 };
 

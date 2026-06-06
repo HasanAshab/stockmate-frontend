@@ -28,10 +28,15 @@ const StockManagement = () => {
   );
 };
 
+import { useEnums } from '../../hooks/useEnums';
+
 const StockInForm = () => {
   const { register, handleSubmit, reset } = useForm();
+  const { enums } = useEnums();
+  const typeId = enums?.stock_log_types?.find(t => t.name === 'In')?.id || 1;
+
   const mutation = useMutation({
-    mutationFn: submitStockIn,
+    mutationFn: (data) => submitStockIn(data, typeId),
     onSuccess: () => { toast.success('Stock added successfully'); reset(); }
   });
 
@@ -80,8 +85,11 @@ const StockInForm = () => {
 
 const StockOutForm = () => {
   const { register, handleSubmit, reset } = useForm();
+  const { enums } = useEnums();
+  const typeId = enums?.stock_log_types?.find(t => t.name === 'Out')?.id || 2;
+
   const mutation = useMutation({
-    mutationFn: submitStockOut,
+    mutationFn: (data) => submitStockOut(data, typeId),
     onSuccess: () => { toast.success('Stock deducted successfully'); reset(); },
     onError: () => { toast.error('Insufficient stock'); }
   });

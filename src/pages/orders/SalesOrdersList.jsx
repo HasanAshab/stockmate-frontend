@@ -1,20 +1,24 @@
 import { useQuery } from '@tanstack/react-query';
 import { getSalesOrders } from '../../api/endpoints/orders';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/Table';
+import { useEnums } from '../../hooks/useEnums';
 import { Button } from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Badge';
 import { format } from 'date-fns';
 
 const SalesOrdersList = () => {
   const { data, isLoading } = useQuery({ queryKey: ['salesOrders'], queryFn: getSalesOrders });
+  const { enums } = useEnums();
+  const statuses = enums?.sales_order_statuses || [];
 
-  const getStatusBadge = (status) => {
-    switch(status) {
-      case 1: return <Badge variant="warning">Pending</Badge>;
-      case 2: return <Badge variant="success">Paid</Badge>;
-      case 3: return <Badge variant="destructive">Failed</Badge>;
-      case 4: return <Badge variant="default">Cancelled</Badge>;
-      default: return <Badge>Unknown</Badge>;
+  const getStatusBadge = (statusId) => {
+    const statusName = statuses.find(s => s.id === statusId)?.name || 'Unknown';
+    switch(statusName) {
+      case 'Pending': return <Badge variant="warning">Pending</Badge>;
+      case 'Paid': return <Badge variant="success">Paid</Badge>;
+      case 'Failed': return <Badge variant="destructive">Failed</Badge>;
+      case 'Cancelled': return <Badge variant="default">Cancelled</Badge>;
+      default: return <Badge>{statusName}</Badge>;
     }
   };
 
@@ -57,7 +61,7 @@ const SalesOrdersList = () => {
                   </TableCell>
                   <TableCell className="text-right space-x-2">
                     <Button variant="outline" size="sm">View</Button>
-                    {so.status === 1 && <Button variant="default" size="sm">Pay Now</Button>}
+                    {so.status === statuses.find(s => s.name === 'Pending')?.id && <Button variant="default" size="sm">Pay Now</Button>}
                   </TableCell>
                 </TableRow>
               ))}

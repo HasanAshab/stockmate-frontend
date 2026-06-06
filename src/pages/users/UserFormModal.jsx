@@ -4,6 +4,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { createUser, updateUser } from '../../api/endpoints/users';
+import { useEnums } from '../../hooks/useEnums';
 import { Modal } from '../../components/ui/Modal';
 import { Input } from '../../components/ui/Input';
 import { Button } from '../../components/ui/Button';
@@ -13,23 +14,26 @@ const schema = z.object({
   name: z.string().min(1, 'Name is required'),
   email: z.string().email('Invalid email'),
   password: z.string().optional(),
-  role: z.coerce.number().min(1).max(2)
+  role: z.coerce.number().min(1)
 });
 
 export const UserFormModal = ({ isOpen, onClose, user }) => {
   const isEditing = !!user;
   const queryClient = useQueryClient();
+  const { enums } = useEnums();
+  const roles = enums?.roles || [];
+  const defaultRole = roles.length > 0 ? roles[0].id : 1;
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: { role: 1 }
+    defaultValues: { role: defaultRole }
   });
 
   useEffect(() => {
     if (user && isOpen) {
       reset({ name: user.name, email: user.email, role: user.role });
     } else if (isOpen) {
-      reset({ name: '', email: '', password: '', role: 1 });
+      reset({ name: '', email: '', password: '', role: defaultRole });
     }
   }, [user, isOpen, reset]);
 
@@ -70,8 +74,9 @@ export const UserFormModal = ({ isOpen, onClose, user }) => {
             {...register('role')}
             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/50 focus-visible:border-primary transition-colors"
           >
-            <option value={1}>Staff</option>
-            <option value={2}>Admin (Full Access)</option>
+            {roles.map(r => (
+              <option key={r.id} value={r.id}>{r.name}</option>
+            ))}
           </select>
         </div>
 

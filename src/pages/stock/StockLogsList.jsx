@@ -1,10 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { getStockLogs } from '../../api/endpoints/stock';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '../../components/ui/Table';
+import { useEnums } from '../../hooks/useEnums';
 import { format } from 'date-fns';
 
 const StockLogsList = () => {
   const { data, isLoading } = useQuery({ queryKey: ['stockLogs'], queryFn: getStockLogs });
+  const { enums } = useEnums();
+  const types = enums?.stock_log_types || [];
+
+  const getTypeName = (typeId) => types.find(t => t.id === typeId)?.name || 'Unknown';
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -34,14 +39,14 @@ const StockLogsList = () => {
                   <TableCell className="font-semibold text-foreground">{log.product_name}</TableCell>
                   <TableCell>
                     <span className={`px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider border ${
-                      log.type === 'in' 
+                      getTypeName(log.type) === 'In' 
                         ? 'bg-success/10 text-success border-success/20' 
                         : 'bg-destructive/10 text-destructive border-destructive/20'
                     }`}>
-                      {log.type}
+                      {getTypeName(log.type)}
                     </span>
                   </TableCell>
-                  <TableCell className="font-bold">{log.type === 'in' ? '+' : '-'}{log.quantity}</TableCell>
+                  <TableCell className="font-bold">{getTypeName(log.type) === 'In' ? '+' : '-'}{log.quantity}</TableCell>
                   <TableCell className="text-muted-foreground">{log.warehouse_name}</TableCell>
                   <TableCell className="text-muted-foreground">{log.user_name}</TableCell>
                   <TableCell className="text-muted-foreground font-medium text-[13px]">
