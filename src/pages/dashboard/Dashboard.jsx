@@ -7,7 +7,7 @@ import { getDashboardData } from '../../api/endpoints/dashboard';
 const MetricCard = ({ title, value, icon: Icon, colorClass, linkTo }) => {
   const CardWrapper = linkTo ? Link : 'div';
   return (
-    <CardWrapper 
+    <CardWrapper
       to={linkTo}
       className={`bg-card border border-border/60 rounded-2xl p-6 shadow-[0_2px_10px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_30px_rgba(0,0,0,0.04)] transition-all duration-300 group ${linkTo ? 'cursor-pointer hover:-translate-y-1' : ''} relative overflow-hidden`}
     >
@@ -61,28 +61,28 @@ const Dashboard = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <MetricCard 
-          title="Total Products" 
-          value={data.total_products} 
-          icon={ArchiveBoxIcon} 
+        <MetricCard
+          title="Total Products"
+          value={data.total_products}
+          icon={ArchiveBoxIcon}
           colorClass={{ bg: 'bg-primary', text: 'text-primary' }}
         />
-        <MetricCard 
-          title="Categories" 
-          value={data.total_categories} 
-          icon={TagIcon} 
+        <MetricCard
+          title="Categories"
+          value={data.total_categories}
+          icon={TagIcon}
           colorClass={{ bg: 'bg-blue-500', text: 'text-blue-500' }}
         />
-        <MetricCard 
-          title="Total Suppliers" 
-          value={data.total_suppliers} 
-          icon={TruckIcon} 
+        <MetricCard
+          title="Total Suppliers"
+          value={data.total_suppliers}
+          icon={TruckIcon}
           colorClass={{ bg: 'bg-purple-500', text: 'text-purple-500' }}
         />
-        <MetricCard 
-          title="Low Stock Alerts" 
-          value={data.total_low_stock} 
-          icon={ExclamationTriangleIcon} 
+        <MetricCard
+          title="Low Stock Alerts"
+          value={data.total_low_stock}
+          icon={ExclamationTriangleIcon}
           colorClass={{ bg: 'bg-warning', text: 'text-warning' }}
           linkTo="/reports/low-stock"
         />
@@ -109,15 +109,14 @@ const Dashboard = () => {
                 <tr key={log.id} className="hover:bg-muted/30 transition-colors group">
                   <td className="px-6 py-4 font-semibold text-foreground group-hover:text-primary transition-colors">{log.product?.name || 'Unknown Product'}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider ${
-                      log.type === 'in' 
-                        ? 'bg-success/10 text-success border border-success/20' 
-                        : 'bg-destructive/10 text-destructive border border-destructive/20'
-                    }`}>
-                      Stock {log.type}
+                    <span className={`px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider ${log.type.name === 'In'
+                      ? 'bg-success/10 text-success border border-success/20'
+                      : 'bg-destructive/10 text-destructive border border-destructive/20'
+                      }`}>
+                      {log.type.name}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-bold text-[15px]">{log.type === 'in' ? '+' : '-'}{log.quantity}</td>
+                  <td className="px-6 py-4 font-bold text-[15px]">{log.type.name === 'In' ? '+' : '-'}{log.quantity}</td>
                   <td className="px-6 py-4 text-muted-foreground font-medium flex items-center gap-2">
                     <div className="w-6 h-6 rounded-full bg-muted flex items-center justify-center text-[10px] font-bold">
                       {(log.user?.name || 'U').charAt(0)}
